@@ -44,10 +44,7 @@ function coinFlips(flips) {
       Math.random() > 0.5 ? coin.push("heads") : coin.push("tails");
     }
   
-    const output = { raw: [], summary: "" };
-    output.raw = coin;
-    output.summary = countFlips(coin);
-    return output
+    return coin;
   }
 
 function countFlips(array) {
@@ -72,7 +69,8 @@ function countFlips(array) {
 
 
 app.get('/app/flips/:number', (req, res) => {
-    res.send(coinFlips(req.params.number));
+  const flips = coinFlips(req.params.number)
+	res.status(200).json({ 'raw': flips, "summary" : countFlips(flips)})
 });
 
 
@@ -99,12 +97,12 @@ function flipACoin(call) {
 
 
 app.get('/app/flip/call/heads', (req, res) => {
-    res.send(flipACoin('heads'));
+  res.status(200).json(flipACoin("heads"))
 });
 
 
 app.get('/app/flip/call/tails', (req, res) => {
-    res.send(flipACoin('tails'));
+  res.status(200).json(flipACoin("tails"))
 });
 
 
@@ -112,5 +110,3 @@ app.get('/app/flip/call/tails', (req, res) => {
 app.use(function (req, res) {
     res.status(404).send('404 NOT FOUND')
 });
-
-  
