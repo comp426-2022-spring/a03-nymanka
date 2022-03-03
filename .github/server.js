@@ -45,9 +45,9 @@ function coinFlips(flips) {
     }
   
     const output = { raw: [], summary: "" };
-    output.raw = flipResults;
-    output.summary = countFlips(flipResults);
-    return coin;
+    output.raw = coin;
+    output.summary = countFlips(coin);
+    return output;
   }
 
 function countFlips(array) {
