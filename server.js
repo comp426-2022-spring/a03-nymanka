@@ -38,61 +38,55 @@ app.get('/app/flip/', (req, res) => {
 
 
 function coinFlips(flips) {
-    const coin = [];
-  
-    for(let i = 0; i < flips; i++){
-      Math.random() > 0.5 ? coin.push("heads") : coin.push("tails");
-    }
-  
-    return coin;
+  const flipResults = [];
+
+  const output = { raw: [], summary: "" };
+
+  for (var i = 0; i < flips; i++) {
+      flipResults.push(coinFlip());
   }
 
-function countFlips(array) {
-    var heads = 0;
-    var tails = 0;
-    for(let i = 0; i < array.length; i++){
-      if(array[i] == 'heads'){
-        heads++;
-      }
-      else{
-        tails++;
-      }
-    }
-    const count = new Map();
-  
-    count.set("tails", tails);
-    count.set("heads", heads);
-    
-    return count;
-  
-  }
+  output.raw = flipResults;
+  output.summary = countFlips(flipResults);
+
+  return output;
+}
+
+  function countFlips(array) {
+    var counts = { heads: 0, tails: 0 };
+
+    array.forEach(element => {
+        if (element == "heads")
+            counts.heads++;
+        else
+            counts.tails++;
+    });
+
+    if (counts.heads == 0)
+        delete counts.heads;
+    else if (counts.tails == 0)
+        delete counts.tails;
+
+    return counts;
+
+}
 
 
 app.get('/app/flips/:number', (req, res) => {
-  const flips = coinFlips(req.params.number)
-	res.status(200).json({ 'raw': flips, "summary" : countFlips(flips)})
+    res.send(coinFlips(req.params.number));
 });
 
 
 function flipACoin(call) {
-    if (call != "heads" & call != "tails" | call == null) {
-      console.log("Error: no input.")
-      console.log("Usage: node guess-flip --call=[heads|tails]")
-    }else{
-      const flip = coinFlip();
-      var result = "lose";
-      if(call == flip){
-        result = "win";
-    }
-    const count = new Map();
-  
-    count.set("call", call);
-    count.set("flip", flip);
-    count.set("result", result);
-   
-    return count;
-  
-    }
+  var result = coinFlip();
+
+    const output = { call: "", flip: "", result: "" };
+
+    output.call = call;
+    output.flip = result;
+    output.result = (call == result ? "win" : "lose");
+
+    return output;
 }
 
 
