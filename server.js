@@ -76,7 +76,7 @@ app.get('/app/flips/:number', (req, res) => {
     res.send(coinFlips(req.params.number));
 });
 
-
+ 
 function flipACoin(of) { //call                       
                             
   var result = coinFlip(); 
